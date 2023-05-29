@@ -1,9 +1,10 @@
 import listType from '../models/List'
-import { useState } from "react";
+import { useEffect, useState,useRef } from "react";
 
-  
+
 
 const Remainder = () => {
+   const inputRef = useRef<HTMLInputElement>(null)
    const [state,setstate] = useState<listType[]>([{
     id:1,
     data:"finish todo app",
@@ -15,6 +16,9 @@ const Remainder = () => {
    const handleNewNote = (e:React.ChangeEvent<HTMLInputElement>) =>{
       setinput(e.target.value)
    }
+   useEffect(()=>{
+       inputRef.current?.focus()
+   },[])
    const newNote = () =>{
      const newTag:listType = { id:Date.now() , data:input , completed:false}
      setstate([...state,newTag])
@@ -51,7 +55,7 @@ const Remainder = () => {
        <ul>
         {state.map(item => <li key={item.id} style={{textDecoration:item.completed?"line-through":"none"}}>{item.data}{ <input type="checkbox" onChange={()=> {handleToggler(item.id)}}/>} <i onClick={()=>deleteNote(item.id)} className="fa-regular fa-circle-xmark"></i></li>)}
        </ul>
-       <input type="text" value={input} onChange={handleNewNote} name="text" id="" />
+       <input ref={inputRef} type="text" value={input} onChange={handleNewNote} name="text" id="" />
        <button type="submit" onClick={newNote} >submit</button>
     </div>
   )
